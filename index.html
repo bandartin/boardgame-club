@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="모인 인원에 맞는 보드게임을 고르고 유튜브 규칙 영상을 찾아보세요.">
+  <title>우리 동호회 보드게임</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./games.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-die" viewBox="0 0 32 32">
+      <rect x="2" y="2" width="28" height="28" rx="6" fill="currentColor"/>
+      <path d="M10 9h.01M22 9h.01M10 16h.01M22 16h.01M10 23h.01M22 23h.01" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-puzzle" viewBox="0 0 32 32">
+      <path d="M6 8h6a3.5 3.5 0 1 1 6 0h7v7a3.5 3.5 0 1 1 0 6v7h-7a3.5 3.5 0 1 0-6 0H6v-7a3.5 3.5 0 1 1 0-6z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="10.5" cy="10.5" r="5.75"/><path d="m15 15 4 4"/>
+    </symbol>
+    <symbol id="icon-people" viewBox="0 0 24 24">
+      <circle cx="9" cy="8" r="3"/><path d="M3 19v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M17 5.2a3 3 0 0 1 0 5.6M21 19v-2a4 4 0 0 0-3-3.9"/>
+    </symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/>
+    </symbol>
+  </svg>
+
+  <header class="masthead">
+    <svg class="decoration die-left" aria-hidden="true"><use href="#icon-die"/></svg>
+    <svg class="decoration puzzle-left" aria-hidden="true"><use href="#icon-puzzle"/></svg>
+    <svg class="decoration puzzle-right" aria-hidden="true"><use href="#icon-puzzle"/></svg>
+    <svg class="decoration die-right" aria-hidden="true"><use href="#icon-die"/></svg>
+    <h1>우리 동호회 보드게임</h1>
+    <p class="total" id="total-count"></p>
+  </header>
+
+  <main class="catalog" aria-labelledby="catalog-title">
+    <div class="catalog-heading">
+      <h2 id="catalog-title">게임 목록</h2>
+      <span class="sample-badge" id="sample-badge" hidden>샘플 목록</span>
+    </div>
+
+    <div class="filters" role="group" aria-label="게임 목록 필터">
+      <label class="field search-field" for="game-search">
+        <span>게임명 검색</span>
+        <span class="search-control">
+          <svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg>
+          <input id="game-search" type="search" placeholder="게임 이름을 입력하세요" autocomplete="off">
+        </span>
+      </label>
+      <label class="field" for="player-count">
+        <span>모인 인원</span>
+        <select id="player-count">
+          <option value="">전체 인원</option>
+        </select>
+      </label>
+      <label class="field" for="sort-order">
+        <span>정렬</span>
+        <select id="sort-order">
+          <option value="name">게임명 가나다순</option>
+          <option value="min">최소 인원 적은순</option>
+          <option value="max">최대 인원 많은순</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="list-status">
+      <p id="result-count" role="status" aria-atomic="true"></p>
+      <button class="tag is-active" id="active-tag" type="button" hidden></button>
+      <button class="reset-link" id="reset-filters" type="button" hidden>필터 초기화</button>
+    </div>
+
+    <ul class="game-grid" id="game-list" aria-label="보드게임 검색 결과"></ul>
+
+    <div class="empty" id="empty-state" hidden>
+      <svg class="empty-die" aria-hidden="true"><use href="#icon-die"/></svg>
+      <h3 id="empty-title">조건에 맞는 게임이 없어요</h3>
+      <p id="empty-detail">검색어를 바꾸거나 필터를 초기화해 보세요.</p>
+      <button class="reset-button" id="empty-reset" type="button">필터 초기화</button>
+    </div>
+    <noscript>게임 목록을 보려면 브라우저에서 자바스크립트를 켜 주세요.</noscript>
+  </main>
+
+  <template id="game-card">
+    <li class="game-card">
+      <h3 class="game-title"></h3>
+      <div class="game-meta">
+        <span class="meta-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-people"/></svg>
+          <span class="game-players"></span>
+        </span>
+        <span class="meta-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-clock"/></svg>
+          <span class="game-duration"></span>
+        </span>
+      </div>
+      <div class="game-tags" role="group" aria-label="키워드로 필터"></div>
+      <div class="game-action">
+        <a class="video-link" target="_blank" rel="noopener noreferrer" hidden><span class="play-icon" aria-hidden="true">▶</span> 규칙 영상<span class="new-tab" aria-hidden="true">↗</span></a>
+        <span class="video-pending">영상 준비 중</span>
+      </div>
+    </li>
+  </template>
+</body>
+</html>
