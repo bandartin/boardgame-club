@@ -153,6 +153,7 @@ h1, h2, h3, p { margin: 0; }
 .game-card.has-video:hover, .game-card.has-video:focus-within { border-color: #e47f9d; }
 .game-title { font-size: 1.18rem; letter-spacing: -0.045em; }
 .game-meta { display: flex; flex-wrap: wrap; gap: 5px 14px; color: var(--quiet); font-size: 0.88rem; }
+.game-note { color: var(--quiet); font-size: 0.82rem; line-height: 1.45; }
 .meta-item { display: inline-flex; align-items: center; gap: 4px; }
 .meta-item .icon { color: var(--ink-pink); width: 17px; height: 17px; }
 .game-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 2px; }
@@ -202,7 +203,7 @@ h1, h2, h3, p { margin: 0; }
 @media (max-width: 580px) {
   body { padding: 0 14px 25px; }
   .masthead { padding: 46px 0 23px; }
-  .masthead h1 { font-size: clamp(1.55rem, 8vw, 2.6rem); }
+  .masthead h1 { font-size: clamp(2.4rem, 11vw, 3.15rem); }
   .total { margin-top: 12px; }
   .decoration { width: 22px; height: 22px; }
   .puzzle-left, .puzzle-right { top: 15px; }

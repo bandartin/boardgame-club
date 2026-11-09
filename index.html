@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="모인 인원에 맞는 보드게임을 고르고 유튜브 규칙 영상을 찾아보세요.">
-  <title>우리 동호회 보드게임</title>
+  <meta name="description" content="보드득 동호회 게임 목록에서 모인 인원에 맞는 게임을 고르고 유튜브 규칙 영상을 찾아보세요.">
+  <title>보드득 보드게임</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./games.js" defer></script>
   <script src="./app.js" defer></script>
@@ -34,13 +34,13 @@
     <svg class="decoration puzzle-left" aria-hidden="true"><use href="#icon-puzzle"/></svg>
     <svg class="decoration puzzle-right" aria-hidden="true"><use href="#icon-puzzle"/></svg>
     <svg class="decoration die-right" aria-hidden="true"><use href="#icon-die"/></svg>
-    <h1>우리 동호회 보드게임</h1>
+    <h1>보드득</h1>
     <p class="total" id="total-count"></p>
   </header>
 
   <main class="catalog" aria-labelledby="catalog-title">
     <div class="catalog-heading">
-      <h2 id="catalog-title">게임 목록</h2>
+      <h2 id="catalog-title">보드게임 목록</h2>
       <span class="sample-badge" id="sample-badge" hidden>샘플 목록</span>
     </div>
 
@@ -98,6 +98,7 @@
           <span class="game-duration"></span>
         </span>
       </div>
+      <p class="game-note" hidden></p>
       <div class="game-tags" role="group" aria-label="키워드로 필터"></div>
       <div class="game-action">
         <a class="video-link" target="_blank" rel="noopener noreferrer" hidden><span class="play-icon" aria-hidden="true">▶</span> 규칙 영상<span class="new-tab" aria-hidden="true">↗</span></a>

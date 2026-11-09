@@ -13,17 +13,18 @@
   let selectedTag = '';
 
   function normalizeName(name) {
-    return name.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
+    return name.normalize('NFKC').toLocaleLowerCase('ko').replace(/[\s!():·-]+/g, '');
   }
 
   function hasPlayerRange({ minPlayers, maxPlayers }) {
     return Number.isSafeInteger(minPlayers) && minPlayers > 0 &&
-      Number.isSafeInteger(maxPlayers) && maxPlayers >= minPlayers;
+      (maxPlayers === Infinity || (Number.isSafeInteger(maxPlayers) && maxPlayers >= minPlayers));
   }
 
   function playerLabel(game) {
     if (!hasPlayerRange(game)) return '인원 미확인';
     const { minPlayers, maxPlayers } = game;
+    if (maxPlayers === Infinity) return `${minPlayers}명 이상`;
     return minPlayers === maxPlayers ? `${minPlayers}명` : `${minPlayers}~${maxPlayers}명`;
   }
 
@@ -33,10 +34,8 @@
       const bHasRange = hasPlayerRange(b);
       if (aHasRange !== bHasRange) return aHasRange ? -1 : 1;
       if (aHasRange && bHasRange) {
-        const difference = sort.value === 'min'
-          ? a.minPlayers - b.minPlayers
-          : b.maxPlayers - a.maxPlayers;
-        if (difference) return difference;
+        if (sort.value === 'min' && a.minPlayers !== b.minPlayers) return a.minPlayers - b.minPlayers;
+        if (sort.value === 'max' && a.maxPlayers !== b.maxPlayers) return b.maxPlayers - a.maxPlayers;
       }
     }
     return byName.compare(a.name, b.name);
@@ -73,6 +72,11 @@
     card.querySelector('.game-title').textContent = game.name;
     card.querySelector('.game-players').textContent = playerLabel(game);
     card.querySelector('.game-duration').textContent = game.duration || '시간 미확인';
+    if (game.note) {
+      const note = card.querySelector('.game-note');
+      note.textContent = game.note;
+      note.hidden = false;
+    }
 
     const tags = card.querySelector('.game-tags');
     for (const keyword of game.keywords || []) {
@@ -103,7 +107,7 @@
     const partySize = Number(players.value);
     const isFiltered = Boolean(term || partySize || selectedTag);
     const shown = games.filter(game =>
-      normalizeName(game.name).includes(term) &&
+      [game.name, ...(game.aliases || [])].some(name => normalizeName(name).includes(term)) &&
       (!partySize || (hasPlayerRange(game) && game.minPlayers <= partySize && partySize <= game.maxPlayers)) &&
       (!selectedTag || game.keywords?.includes(selectedTag))
     ).sort(compareGames);
@@ -129,13 +133,21 @@
   }
 
   const partySizes = new Set();
-  for (const game of games.filter(hasPlayerRange)) {
-    for (let size = game.minPlayers; size <= game.maxPlayers; size++) {
+  const knownRanges = games.filter(hasPlayerRange);
+  const maxListedSize = Math.max(0, ...knownRanges.map(game =>
+    game.maxPlayers === Infinity ? game.minPlayers : game.maxPlayers
+  ));
+  for (const game of knownRanges) {
+    for (let size = game.minPlayers; size <= Math.min(game.maxPlayers, maxListedSize); size++) {
       partySizes.add(size);
     }
   }
   for (const size of [...partySizes].sort((a, b) => a - b)) {
     players.add(new Option(`${size}명`, size));
+  }
+  if (knownRanges.some(game => game.maxPlayers === Infinity)) {
+    const largerParty = maxListedSize + 1;
+    players.add(new Option(`${largerParty}명 이상`, largerParty));
   }
 
   document.querySelector('#total-count').textContent = `전체 ${games.length}개 게임`;
